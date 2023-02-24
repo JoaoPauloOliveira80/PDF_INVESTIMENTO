@@ -94,8 +94,10 @@ public class Main {
 				stmt.setDouble(8, op.getValorCompra());
 				stmt.setDouble(9, op.getQtdVenda());
 				
-				if(op.getId() > 1) {
-					System.out.println("Arquivo armazenado com sucesso");
+				if(op.getId() > 0) {
+					
+				}else {
+					System.out.println("Ocorreu um erro");
 				}
 			}
 

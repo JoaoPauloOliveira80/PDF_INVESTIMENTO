@@ -20,7 +20,7 @@ public class ConexaoMySQL {
 	            //create the connection
 	            String user ="root";
 	            String password ="vertrigo";
-	            String url ="jdbc:mysql://localhost:3306/proventos?autoReconnect=true&amp;useSSL=false";
+	            String url ="jdbc:mysql://localhost:3306/proventos?autoReconnect=true&useSSL=false";
 	            
 
 	            try {
