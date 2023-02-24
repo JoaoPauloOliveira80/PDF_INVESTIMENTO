@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Operacao {
+	private int id;
 	private String dtNegociacao;
 	private Integer conta;
 	private String ativo;
@@ -21,9 +22,12 @@ public class Operacao {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Operacao(String dtNegociacao, Integer conta, String ativo, Double price, Integer qtdCompra, Integer qtdVenda,
-			Double valorCompra, Double valorVenda) {
+	
+
+	public Operacao(int id, String dtNegociacao, Integer conta, String ativo, Double price, Integer qtdCompra,
+			Integer qtdVenda, Double valorCompra, Double valorVenda) {
 		super();
+		this.id = id;
 		this.dtNegociacao = dtNegociacao;
 		this.conta = conta;
 		this.ativo = ativo;
@@ -33,6 +37,20 @@ public class Operacao {
 		this.valorCompra = valorCompra;
 		this.valorVenda = valorVenda;
 	}
+
+	
+
+	public int getId() {
+		return id;
+	}
+
+
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
 
 	public String getDtNegociacao() {
 		return dtNegociacao;
@@ -94,52 +112,16 @@ public class Operacao {
 		return valorVenda;
 	}
 
-	@Override
-	public String toString() {
-		return "Operacao [dtNegociacao=" + dtNegociacao + ", conta=" + conta + ", ativo=" + ativo + ", price=" + price
-				+ ", qtdCompra=" + qtdCompra + ", qtdVenda=" + qtdVenda + ", valorCompra=" + valorCompra
-				+ ", valorVenda=" + valorVenda + "]";
-	}
-
+	
 	public void setValorVenda(Double valorVenda) {
 		this.valorVenda = valorVenda;
 	}
 
-	public void getPer() throws FileNotFoundException {
-		String caminho1 = "C:\\PROJETO DEV\\PDF_INVESTIMENTO/negociacao.csv";
-
-		FileInputStream entradaArquivo = new FileInputStream(new File(caminho1));
-
-		Scanner lerArq = new Scanner(entradaArquivo, "UTF-8");
-
-		List<Operacao> operacao = new ArrayList<>();
-		while (lerArq.hasNext()) {
-			String linha = lerArq.nextLine();
-
-			if (linha != null && !linha.isEmpty()) {
-				// System.out.println(linha);
-
-				String[] dados = linha.split("\\;");
-
-				Operacao op = new Operacao();
-				op.setDtNegociacao(dados[0]);
-				op.setConta(Integer.parseInt(dados[1]));
-				op.setAtivo(dados[2]);
-				op.setPrice(Double.valueOf(dados[3].replace(",", ".")));
-				op.setQtdCompra(Integer.parseInt(dados[4]));
-				op.setQtdVenda(Integer.parseInt(dados[5]));
-				op.setValorCompra(Double.valueOf(dados[6].replace(",", ".")));
-				op.setValorVenda(Double.valueOf(dados[7].replace(",", ".")));
-
-				operacao.add(op);
-			}
-		}
-
-		System.out.println(operacao);
-		for (Operacao op : operacao) {
-			System.out.println(op);
-		}
-		lerArq.close();
+	@Override
+	public String toString() {
+		return "Operacao [id=" + id + ", dtNegociacao=" + dtNegociacao + ", conta=" + conta + ", ativo=" + ativo
+				+ ", price=" + price + ", qtdCompra=" + qtdCompra + ", qtdVenda=" + qtdVenda + ", valorCompra="
+				+ valorCompra + ", valorVenda=" + valorVenda + "]";
 	}
-
+	
 }

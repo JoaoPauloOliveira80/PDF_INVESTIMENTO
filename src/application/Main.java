@@ -15,82 +15,97 @@ import application.modal.Operacao;
 public class Main {
 
 	static String[] dados;
+	static List<Operacao> operacao;
+	
+	Operacao op;
 	public static void main(String[] args) throws IOException {
-		
+
 		String caminho1 = "C:\\PROJETO DEV\\PDF_INVESTIMENTO/ResumoNegociacao_2023-02-23.csv";
-		
+
 		FileInputStream entradaArquivo = new FileInputStream(new File(caminho1));
 		Scanner lerArq = new Scanner(entradaArquivo, "UTF-8");
 
-	   List<Operacao> operacao = new ArrayList<>();
-	   
-	   
-		while(lerArq.hasNext()) {
+		operacao = new ArrayList<>();
+
+		while (lerArq.hasNext()) {
 			String linha = lerArq.nextLine();
-			
-			
-			if(linha != null && !linha.isEmpty()) {
-				//System.out.println(linha);
-								
+
+			if (linha != null && !linha.isEmpty()) {
+				// System.out.println(linha);
+
 				dados = linha.split("\\;");
-				
-				
-				Operacao op = new Operacao();				
-				op.setDtNegociacao(dados[0]);			
-				op.setConta(Integer.parseInt(dados[1]));				
+
+				Operacao op = new Operacao();
+				op.setDtNegociacao(dados[0]);
+				op.setConta(Integer.parseInt(dados[1]));
 				op.setAtivo(dados[2]);
-				op.setPrice(Double.valueOf(dados[3].replace(",", ".")));				
-				op.setQtdCompra(Integer.parseInt(dados[4]));		
-			 	op.setQtdVenda(Integer.parseInt(dados[5]));
+				op.setPrice(Double.valueOf(dados[3].replace(",", ".")));
+				op.setQtdCompra(Integer.parseInt(dados[4]));
+				op.setQtdVenda(Integer.parseInt(dados[5]));
 				op.setValorCompra(Double.valueOf(dados[6].replace(",", ".")));
 				op.setValorVenda(Double.valueOf(dados[7].replace(",", ".")));
-				
+
 				operacao.add(op);
-				
+
 				create();
 
 			}
 		}
-		
+
 		System.out.println(operacao);
-		for(Operacao op : operacao) {
+		
+		
+		for (Operacao op : operacao) {
 			System.out.println(op);
-			
+						
+
 		}
-		
-		
-		
-		
-		lerArq.close();	
+
+		lerArq.close();
 	}
-	
+
 	public static void create() {
 		boolean f = false;
 		try {
 			Connection conn = ConexaoMySQL.create();
-			
-			System.out.println("Testando");
-			String sql = ("Insert into operacao (ativo,conta,dt_negociacao,price,qtd_compra,qtd_venda,valor_compra,valor_venda) values('?', '?', '?', '?', '?', '?', '?', '?')");
-			PreparedStatement stmt = conn.prepareStatement(sql);
-			
-			
-			stmt.setString(0, dados[0]);
-			stmt.setInt(1,Integer.parseInt(dados[1]));
-			stmt.setString(2, dados[2]);
-			stmt.setDouble(3, Double.valueOf(dados[3].replace(",", ".")));
-			stmt.setInt(4, Integer.parseInt(dados[4]));
-			stmt.setInt(5, Integer.parseInt(dados[5]));
-			stmt.setDouble(6, Double.valueOf(dados[6].replace(",", ".")));
-			stmt.setDouble(7, Double.valueOf(dados[7].replace(",", ".")));
+
+			String mysql = "INSERT INTO operacao (id, ativo, conta, dt_negociacao, price, qtd_compra, qtd_venda, valor_compra, valor_venda)	VALUES (?,?,?,?,?,?,?,?,?)";
+			PreparedStatement stmt = conn.prepareStatement(mysql);
 			
 			
+			for (Operacao op : operacao) {
+				 int cont = 0;
+				
+				for (int i = 0; i < operacao.size(); i++) {
+					cont+=1;
+					
+					op.setId(cont);
+				}
+				
+//				System.out.println("Id: " + cont);
+//				System.out.println("Testando" + op.getAtivo());
+				stmt.setInt(1, op.getId());
+				stmt.setString(2, op.getAtivo());
+				stmt.setInt(3, op.getConta());
+				stmt.setString(4, op.getDtNegociacao());
+				stmt.setDouble(5, op.getPrice());
+				stmt.setInt(6, Integer.valueOf(op.getQtdCompra()));
+				stmt.setInt(7, Integer.valueOf(op.getQtdVenda()));
+				stmt.setDouble(8, op.getValorCompra());
+				stmt.setDouble(9, op.getQtdVenda());
+				
+				if(op.getId() > 1) {
+					System.out.println("Arquivo armazenado com sucesso");
+				}
+			}
+
 			stmt.executeUpdate();
 			conn.close();
 			stmt.close();
-			f=true;
+			f = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-            System.out.println(e);
+			System.out.println("Erro: " + e);
 		}
 	}
 }
