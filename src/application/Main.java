@@ -47,13 +47,11 @@ public class Main {
 
 				operacao.add(op);
 
+				//CHAMAMOS O METODO INSERT
 				create();
 
 			}
 		}
-
-		System.out.println(operacao);
-		
 		
 		for (Operacao op : operacao) {
 			System.out.println(op);
