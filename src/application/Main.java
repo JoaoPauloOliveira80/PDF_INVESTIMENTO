@@ -72,20 +72,19 @@ public class Main {
 			String mysql = "INSERT INTO operacao (id, ativo, conta, dt_negociacao, price, qtd_compra, qtd_venda, valor_compra, valor_venda)	VALUES (?,?,?,?,?,?,?,?,?)";
 			PreparedStatement stmt = conn.prepareStatement(mysql);
 			
-			
+			int cont = 1;
 			for (Operacao op : operacao) {
-				 int cont = 0;
+				 
 				
-				for (int i = 0; i < operacao.size(); i++) {
-					cont+=1;
-					
+				
+										
 					op.setId(cont);
-				}
+				
 				
 //				System.out.println("Id: " + cont);
 //				System.out.println("Testando" + op.getAtivo());
 				stmt.setInt(1, op.getId());
-				stmt.setString(2, op.getAtivo());
+				stmt.setString(2, op.getAtivo().replaceAll("\"", ""));
 				stmt.setInt(3, op.getConta());
 				stmt.setString(4, op.getDtNegociacao());
 				stmt.setDouble(5, op.getPrice());
@@ -94,6 +93,7 @@ public class Main {
 				stmt.setDouble(8, op.getValorCompra());
 				stmt.setDouble(9, op.getQtdVenda());
 				
+				cont++;
 				if(op.getId() > 0) {
 					
 				}else {
